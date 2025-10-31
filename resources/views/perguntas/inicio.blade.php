@@ -20,9 +20,13 @@
             text-align: center;
             margin: 0;
             padding: 0;
+            overflow: hidden;
         }
 
+        /* Container principal */
         .container {
+            position: relative;
+            z-index: 10;
             background: rgba(0, 0, 0, 0.75);
             margin: 150px auto;
             padding: 60px;
@@ -69,16 +73,68 @@
             transform: scale(1.05);
             box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
         }
+
+        /* Bolas caindo */
+        .bola {
+            position: fixed;
+            top: -100px;
+            width: 50px;
+            height: 50px;
+            background: url('{{ asset('images/bola.png') }}') no-repeat center center;
+            background-size: contain;
+            opacity: 0.9;
+            animation: cair linear forwards;
+            z-index: 1;
+        }
+
+        @keyframes cair {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(110vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 
 <body>
+    {{-- Bolas caindo (camada de fundo dinâmica) --}}
+    <div id="bolas"></div>
+
     <div class="container text-center">
         <h1>⚽ Quiz de Futebol ⚽</h1>
         <p class="lead">Teste seus conhecimentos com {{ $total_perguntas }} perguntas desafiadoras.</p>
         <p>Mostre que você é craque dentro e fora de campo!</p>
         <a href="{{ route('responder') }}" class="botao mt-4">Iniciar Quiz</a>
     </div>
+
+    <script>
+        // Função para criar bolas animadas
+        function criarBola() {
+            const bola = document.createElement('div');
+            bola.classList.add('bola');
+
+            // Define posição horizontal e duração aleatória
+            bola.style.left = Math.random() * window.innerWidth + 'px';
+            bola.style.animationDuration = 3 + Math.random() * 4 + 's'; // 3–7 segundos
+
+            // Tamanhos variados
+            const tamanho = 30 + Math.random() * 50; // 30–80px
+            bola.style.width = tamanho + 'px';
+            bola.style.height = tamanho + 'px';
+
+            document.body.appendChild(bola);
+
+            // Remove após a animação
+            setTimeout(() => bola.remove(), 7000);
+        }
+
+        // Gera bolas continuamente
+        setInterval(criarBola, 600); // Uma nova bola a cada 0.6s
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>

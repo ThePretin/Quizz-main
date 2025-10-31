@@ -103,6 +103,21 @@
         </div>
     </div>
 
+    {{-- Som de vitória --}}
+    <audio id="vitoriaAudio" src="{{ asset('sounds/vitoria.mp3') }}" preload="auto"></audio>
+
+    <script>
+        // Toca o som de vitória ao carregar a página
+        window.addEventListener('load', () => {
+            const audio = document.getElementById('vitoriaAudio');
+            audio.volume = 0.5; // volume moderado
+            audio.play().catch(() => {
+                // Caso o navegador bloqueie autoplay, podemos liberar após interação
+                document.body.addEventListener('click', () => audio.play(), { once: true });
+            });
+        });
+    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
